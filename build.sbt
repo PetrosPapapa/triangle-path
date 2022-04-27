@@ -18,5 +18,8 @@ lazy val root = project
         "-unchecked",
       )
     },
+
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.10" % Test,
+    libraryDependencies += "org.typelevel" %% "cats-effect" % "3.3.7",
+    libraryDependencies += "org.typelevel" %% "cats-effect-testing-scalatest" % "1.4.0" % Test,
   )
