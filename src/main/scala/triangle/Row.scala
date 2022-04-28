@@ -44,6 +44,22 @@ object Row {
     case Some(r) => rows.tail.foldLeft(r.values.map(Path(_)))(fold)
   }
 
+  /**
+    * Calculates the minimal path of a triangle
+    * 
+    * Tail recursive version of [[foldAll]].
+    * 
+    * Folds all rows in the triangle using [[fold]].
+    * 
+    * Returns an empty `Seq` if given an empty triangle.
+    * 
+    * May return multiple results in the sequence if given an invalid
+    * triangle.
+    * 
+    * @note Expects the rows in reverse order (bottom row first).
+    * @param rows The rows of the triangle (bottom row first).
+    * @return A sequence containing the minimal path.
+    */
   def foldAllRec(rows: Seq[Row]): Seq[Path] = rows.headOption match {
     case None => Seq()
     case Some(r) => foldAllRecAcc(rows.tail, r.values.map(Path(_)))
