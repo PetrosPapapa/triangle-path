@@ -32,4 +32,19 @@ class RowTests extends AnyWordSpec with Matchers with LoneElement {
     }
 
   }
+
+  "Row.foldAllRec" should {
+
+    "calculate the example" in {
+      val rows = Seq(
+        Row(List(11,2,10,9)),
+        Row(List(3,8,5)),
+        Row(List(6,3)),
+        Row(List(7)),
+      )
+
+      Row.foldAllRec(rows).loneElement should be (Result(List(7, 6, 3, 2)))
+    }
+
+  }
 }

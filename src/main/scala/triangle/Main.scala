@@ -19,7 +19,7 @@ object Main extends IOApp with Input with RandomRow {
           case Some(i) => for {
             rand <- Random.scalaUtilRandom[IO]
             triangle <- gen(rand, i)
-            solution = Row.foldAll(triangle)
+            solution = Row.foldAllRec(triangle)
             code <- solution match {
               case Seq() => IO.println("Empty triangle.").as(ExitCode.Error)
               case Seq(r) => IO.println(r.output).as(ExitCode.Success)
@@ -33,7 +33,7 @@ object Main extends IOApp with Input with RandomRow {
           .flatMap( _ match {
             case None => IO.println("Failed to parse.").as(ExitCode.Error)
             case Some(s) =>
-              Row.foldAll(s) match {
+              Row.foldAllRec(s) match {
                 case Seq() => IO.println("Empty triangle.").as(ExitCode.Error)
                 case Seq(r) => IO.println(r.output).as(ExitCode.Success)
                 case _ => IO.println("Invalid triangle.").as(ExitCode.Error)

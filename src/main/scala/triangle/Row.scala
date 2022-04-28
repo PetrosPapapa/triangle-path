@@ -1,5 +1,7 @@
 package triangle
 
+import annotation.tailrec
+
 case class Row(values: List[Int])
 
 object Row {
@@ -17,5 +19,15 @@ object Row {
     case Some(r) => rows.tail.foldLeft(r.values.map(Result(_)))(fold)
   }
 
+  def foldAllRec(rows: Seq[Row]): Seq[Result] = rows.headOption match {
+    case None => Seq()
+    case Some(r) => foldAllRecAcc(rows.tail, r.values.map(Result(_)))
+  }
+
+  @tailrec
+  private def foldAllRecAcc(rows: Seq[Row], acc: Seq[Result] = Seq()): Seq[Result] = rows.headOption match {
+    case None => acc
+    case Some(r) => foldAllRecAcc(rows.tail, fold(acc, r))
+  }
 }
 
