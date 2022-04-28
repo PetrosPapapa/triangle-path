@@ -28,7 +28,7 @@ class RowTests extends AnyWordSpec with Matchers with LoneElement {
         Row(List(7)),
       )
 
-      Row.foldAll(rows).loneElement should be (Result("7 + 6 + 3 + 2", 18))
+      Row.foldAll(rows).loneElement should be (Result(List(7, 6, 3, 2)))
     }
 
   }
