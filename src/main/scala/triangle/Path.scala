@@ -1,7 +1,7 @@
 package triangle
 
-case class Result(path: List[Int], cost: Int) {
-  def +(node: Int): Result = copy(
+case class Path(path: List[Int], cost: Int) {
+  def +(node: Int): Path = copy(
     path = node :: path, // we are going bottom-up so adding to the front
     cost = cost + node
   )
@@ -11,8 +11,8 @@ case class Result(path: List[Int], cost: Int) {
   def output: String = s"Minimal path is: $pathToString  = $cost"
 }
 
-object Result {
-  def apply(node: Int): Result = Result(List(node), node)
+object Path {
+  def apply(node: Int): Path = Path(List(node), node)
 }
 
 

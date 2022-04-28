@@ -10,7 +10,7 @@ class RowTests extends AnyWordSpec with Matchers with LoneElement {
 
     "calculate costs for a row of 3" in {
       val row = Row(List(3,2,1))
-      val results = Seq(Result(6), Result(7), Result(5), Result(4))
+      val results = Seq(Path(6), Path(7), Path(5), Path(4))
       
       Row.fold(results, row).map(_.cost) should be (Seq(9, 7, 5))
     }
@@ -28,7 +28,7 @@ class RowTests extends AnyWordSpec with Matchers with LoneElement {
         Row(List(7)),
       )
 
-      Row.foldAll(rows).loneElement should be (Result(List(7, 6, 3, 2), 18))
+      Row.foldAll(rows).loneElement should be (Path(List(7, 6, 3, 2), 18))
     }
 
   }
@@ -43,7 +43,7 @@ class RowTests extends AnyWordSpec with Matchers with LoneElement {
         Row(List(7)),
       )
 
-      Row.foldAllRec(rows).loneElement should be (Result(List(7, 6, 3, 2), 18))
+      Row.foldAllRec(rows).loneElement should be (Path(List(7, 6, 3, 2), 18))
     }
 
   }
