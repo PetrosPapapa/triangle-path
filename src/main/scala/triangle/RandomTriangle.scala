@@ -30,9 +30,9 @@ trait RandomTriangle {
     * @return The shuffled triangle.
     */
   def randomize[F[_] : Applicative](rand: Random[F], triangle: Triangle): F[Triangle] =
-    triangle.map(r => 
+    triangle.traverse(r => 
       rand.shuffleList(r.values).map(vs => r.copy(values = vs))
-    ).sequence
+    )
 
   /**
     * Constructs a triangle of a given size with randomized rows of nodes (1..n)
