@@ -25,6 +25,13 @@ case class Path(path: List[Int], cost: Int) {
 }
 
 object Path {
+
+  /**
+    * Initializes a [[Path]] with a given node.
+    * 
+    * @param node The node to use.
+    * @return The initialised path.
+    */
   def apply(node: Int): Path = Path(List(node), node)
 }
 
