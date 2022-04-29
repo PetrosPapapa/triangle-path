@@ -6,6 +6,7 @@ import cats.effect.{ IO, IOApp, ExitCode }
 import cats.effect.implicits.*
 import cats.effect.std.Random
 
+import concurrent.duration.*
 import util.Try
 
 object Main extends IOApp with Input with RandomTriangle {
@@ -36,16 +37,31 @@ object Main extends IOApp with Input with RandomTriangle {
             for {
               rand <- Random.scalaUtilRandom[IO] // get a random generator
               triangle <- gen(rand, i) // generate a random triangle
+              startTime <- IO.monotonic
               solution = Triangle.minPath(
                 triangle
               ) // calculate the minimal path
+              endTime <- IO.monotonic
+              duration = endTime - startTime
               code <- solution match {
-                case None    => IO.println("Empty triangle.").as(ExitCode.Error)
-                case Some(r) => IO.println(r.output).as(ExitCode.Success)
+                case None => IO.println("Empty triangle.").as(ExitCode.Error)
+                case Some(r) =>
+                  IO.println(
+                    s"Path cost: ${r.cost} - Duration: ${pretty(duration)}"
+                  ).as(ExitCode.Success)
               }
             } yield (code)
         }
 
     }
 
+  /**
+    * Crude pretty printer for `FiniteDuration`
+    */
+  def pretty(d: FiniteDuration): String = {
+    val m = d.toMinutes
+    val s = (d - m.minutes).toSeconds
+    val n = (d - m.minutes - s.seconds).toMillis
+    s"${m}m${s}s${n}ms"
+  }
 }
