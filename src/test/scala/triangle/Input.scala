@@ -16,7 +16,7 @@ class InputTests extends AnyWordSpec with Matchers with OptionValues with Input 
       parse("   1 2\t 3\t\t\t4  5    \t").value.values should be (List(1,2,3,4,5))
     }
 
-  "parse a line with negative numbers" in {
+    "parse a line with negative numbers" in {
       parse("   1 -2\t 3\t\t\t-4  5    \t").value.values should be (List(1,-2,3,-4,5))
     }
 
@@ -36,4 +36,31 @@ class InputTests extends AnyWordSpec with Matchers with OptionValues with Input 
       parse("") should be (None)
     }
   }
+
+  "validate" should {
+    "succeed on a valid triangle with 4-rows" in {
+      validate(Seq(r(1,2,3,4),r(5,6,7),r(8,9),r(10))) should be (true)
+    }
+
+    "succeed on an empty triangle" in {
+      validate(Seq()) should be (true)
+    }
+
+    "fail on an inverted triangle with 2-rows" in {
+      validate(Seq(r(1),r(2,3))) should be (false)
+    }
+
+    "fail on a head-less triangle with 2 rows" in {
+      validate(Seq(r(1,2),r(3,4,5))) should be (false)
+    }
+
+    "fail on a 2x2 square" in {
+      validate(Seq(r(1,2),r(3,4))) should be (false)
+    }
+
+  }
+
+
+  def r(vs: Int*): Row = Row(vs.toList)
+
 }

@@ -19,7 +19,9 @@ object Main extends IOApp with Input with RandomRow {
             case None => // at least 1 line failed
               IO.println("Failed to parse.").as(ExitCode.Error) 
             case Some(s) =>
-              Row.foldAllRec(s) match { // Calculate the minimal path
+              if (!validate(s)) 
+              then IO.println("Invalid triangle.").as(ExitCode.Error)
+              else Row.foldAllRec(s) match { // Calculate the minimal path
                 case Seq() => IO.println("Empty triangle.").as(ExitCode.Error)
                 case Seq(r) => IO.println(r.output).as(ExitCode.Success)
                 case _ => IO.println("Invalid triangle.").as(ExitCode.Error)

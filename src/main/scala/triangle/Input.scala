@@ -6,7 +6,9 @@ import cats.implicits.*
 import cats.effect.std.Console
 import cats.effect.implicits.*
 
+import annotation.tailrec
 import util.Try
+
 
 trait Input {
 
@@ -57,5 +59,20 @@ trait Input {
       .toList
       .traverse(s => Try(s.toInt).toOption) // if one fails, the entire result will be None
       .map(Row(_))
+
+
+  /**
+    * Validates the structure of an (inverted) triangle.
+    * 
+    * @param triangle The triangle as a sequence of rows.
+    * @return true if the structure is valid, false otherwise
+    */
+  def validate(triangle: Seq[Row]): Boolean = validateRec(triangle, triangle.length)
+
+  @tailrec
+  private def validateRec(triangle: Seq[Row], length: Int): Boolean = triangle.headOption match {
+    case None => true
+    case Some(h) => if (h.values.length != length) then false else validateRec(triangle.tail, length - 1)
+  }
 
 }
