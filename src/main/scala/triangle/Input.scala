@@ -39,10 +39,10 @@ trait Input {
     * @return A function for parsing a sequence of lines from stdin
     *         using `tailRecM`.
     */
-  def read[F[_] : FlatMap : Console](using e: MonadError[F, Throwable]): List[Option[Row]] => F[Either[List[Option[Row]], Option[List[Row]]]] = l =>
+  def read[F[_] : FlatMap : Console](using e: MonadError[F, Throwable]): List[Option[Row]] => F[Either[List[Option[Row]], Option[Triangle]]] = l =>
   Console[F].readLine
     .map { line => Left(parse(line) :: l)}
-    .orElse(Right(l.sequence).pure[F])
+    .orElse(Right(l.sequence.map(_.toSeq)).pure[F])
 
   /**
     * Parses a line of numbers corresponding to a row of the triangle.
@@ -67,10 +67,10 @@ trait Input {
     * @param triangle The triangle as a sequence of rows.
     * @return true if the structure is valid, false otherwise
     */
-  def validate(triangle: Seq[Row]): Boolean = validateRec(triangle, triangle.length)
+  def validate(triangle: Triangle): Boolean = validateRec(triangle, triangle.length)
 
   @tailrec
-  private def validateRec(triangle: Seq[Row], length: Int): Boolean = triangle.headOption match {
+  private def validateRec(triangle: Triangle, length: Int): Boolean = triangle.headOption match {
     case None => true
     case Some(h) => if (h.values.length != length) then false else validateRec(triangle.tail, length - 1)
   }

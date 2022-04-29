@@ -7,7 +7,7 @@ import cats.implicits.*
 import collection.immutable.Queue
 import annotation.tailrec
 
-trait RandomRow {
+trait RandomTriangle {
 
   /**
     * Constructs a triangle of a given size with linear rows (1..n)
@@ -17,8 +17,8 @@ trait RandomRow {
     * @return The generated triangle.
     */
   @tailrec
-  final def linear(n: Int, q: Queue[Row] = Queue()): Queue[Row] = 
-    if n <= 0 then q
+  final def linear(n: Int, q: Queue[Row] = Queue()): Triangle = 
+    if n <= 0 then q.toSeq
     else linear(n-1, q :+ Row((1 to n).toList))
 
   /**
@@ -29,8 +29,8 @@ trait RandomRow {
     * @param rows The triangle to shuffle.
     * @return The shuffled triangle.
     */
-  def randomize[F[_] : Applicative](rand: Random[F], rows: Seq[Row]): F[Seq[Row]] =
-    rows.map(r => 
+  def randomize[F[_] : Applicative](rand: Random[F], triangle: Triangle): F[Triangle] =
+    triangle.map(r => 
       rand.shuffleList(r.values).map(vs => r.copy(values = vs))
     ).sequence
 
@@ -42,7 +42,7 @@ trait RandomRow {
     * @param n The size of the triangle.
     * @return The generated triangle.
     */
-  def gen[F[_] : Applicative](rand: Random[F], n: Int): F[Seq[Row]] = 
+  def gen[F[_] : Applicative](rand: Random[F], n: Int): F[Triangle] = 
     randomize(rand, linear(n))
 
 }

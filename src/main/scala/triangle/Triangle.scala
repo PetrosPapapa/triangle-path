@@ -4,7 +4,9 @@ import annotation.tailrec
 
 case class Row(values: List[Int])
 
-object Row {
+type Triangle = Seq[Row]
+
+object Triangle {
 
   /**
     * Folds minimal path calculations upwards in the triangle
@@ -16,7 +18,7 @@ object Row {
     *  @param row the current row
     *  @return the minimal paths for the current row
     */
-  def fold(results: Seq[Path], row: Row): Seq[Path] = {
+  def foldRow(results: Seq[Path], row: Row): Seq[Path] = {
     results
       .sliding(2) // pairs of possible paths in the next row
       .toSeq // conversion will happen sooner or later
@@ -39,36 +41,14 @@ object Row {
     * @param rows The rows of the triangle (bottom row first).
     * @return A sequence containing the minimal path.
     */
-  def foldAll(rows: Seq[Row]): Seq[Path] = rows.headOption match {
-    case None => Seq()
-    case Some(r) => rows.tail.foldLeft(r.values.map(Path(_)))(fold)
-  }
-
-  /**
-    * Calculates the minimal path of a triangle
-    * 
-    * Tail recursive version of [[foldAll]].
-    * 
-    * Folds all rows in the triangle using [[fold]].
-    * 
-    * Returns an empty `Seq` if given an empty triangle.
-    * 
-    * May return multiple results in the sequence if given an invalid
-    * triangle.
-    * 
-    * @note Expects the rows in reverse order (bottom row first).
-    * @param rows The rows of the triangle (bottom row first).
-    * @return A sequence containing the minimal path.
-    */
-  def foldAllRec(rows: Seq[Row]): Seq[Path] = rows.headOption match {
-    case None => Seq()
-    case Some(r) => foldAllRecAcc(rows.tail, r.values.map(Path(_)))
+  def minPath(triangle: Triangle): Option[Path] = triangle.headOption.flatMap { r =>
+    foldAll(triangle.tail, r.values.map(Path(_)))
   }
 
   @tailrec
-  private def foldAllRecAcc(rows: Seq[Row], acc: Seq[Path] = Seq()): Seq[Path] = rows.headOption match {
-    case None => acc
-    case Some(r) => foldAllRecAcc(rows.tail, fold(acc, r))
+  private def foldAll(rows: Seq[Row], acc: Seq[Path] = Seq()): Option[Path] = rows.headOption match {
+    case None => acc.headOption
+    case Some(r) => foldAll(rows.tail, foldRow(acc, r))
   }
 }
 
