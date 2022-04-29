@@ -16,7 +16,7 @@ Build a fat jar using:
 
 The file will be located at `target/scala-3.1.0/MinTrianglePath.jar`.
 
-The jar is also available as a [release](./releases/latest).
+The jar is also available as a [release](https://github.com/PetrosPapapa/triangle-path/releases/latest).
 
 ## Run
 
