@@ -23,5 +23,5 @@ lazy val root = project
     libraryDependencies += "org.typelevel" %% "cats-effect" % "3.3.7",
     libraryDependencies += "org.typelevel" %% "cats-effect-testing-scalatest" % "1.4.0" % Test,
 
-    assembly / assemblyJarName := "triangle.jar",
+    assembly / assemblyJarName := "MinTrianglePath.jar",
   )
