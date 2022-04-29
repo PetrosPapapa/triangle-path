@@ -25,7 +25,8 @@ trait Input {
     *         to parse any of the numbers.
     */
   def parse(line: String): Option[Row] =
-    line.split("\\s+")
+    line.trim
+      .split("\\s+")
       .toList
       .traverse(s => Try(s.toInt).toOption) // if one fails, the entire result will be None
       .map(Row(_))
